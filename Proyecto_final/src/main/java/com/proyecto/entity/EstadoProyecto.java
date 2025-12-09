@@ -2,14 +2,14 @@ package com.proyecto.entity;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum EstadoTarea {
-    TODO("todo"),
-    IN_PROGRESS("in_progress"),
-    COMPLETED("completed");
+public enum EstadoProyecto {
+    ACTIVE("active"),
+    COMPLETED("completed"),
+    ON_HOLD("on_hold");
     
     private final String value;
     
-    EstadoTarea(String value) {
+    EstadoProyecto(String value) {
         this.value = value;
     }
     
@@ -18,12 +18,12 @@ public enum EstadoTarea {
         return value;
     }
     
-    public static EstadoTarea fromValue(String value) {
-        for (EstadoTarea estado : EstadoTarea.values()) {
+    public static EstadoProyecto fromValue(String value) {
+        for (EstadoProyecto estado : EstadoProyecto.values()) {
             if (estado.value.equals(value)) {
                 return estado;
             }
         }
-        throw new IllegalArgumentException("Estado inválido: " + value);
+        throw new IllegalArgumentException("Estado de proyecto inválido: " + value);
     }
 }

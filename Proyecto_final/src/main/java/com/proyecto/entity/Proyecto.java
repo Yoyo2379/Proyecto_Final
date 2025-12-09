@@ -21,16 +21,21 @@ public class Proyecto {
     @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
     
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EstadoProyecto status = EstadoProyecto.ACTIVE;
+    
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL)
     private List<Tarea> tareas;
     
     public Proyecto() {}
     
-    public Proyecto(Long id, String nombre, String descripcion, LocalDateTime fechaCreacion, List<Tarea> tareas) {
+    public Proyecto(Long id, String nombre, String descripcion, LocalDateTime fechaCreacion, EstadoProyecto status, List<Tarea> tareas) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fechaCreacion = fechaCreacion;
+        this.status = status;
         this.tareas = tareas;
     }
     
@@ -74,8 +79,19 @@ public class Proyecto {
         this.tareas = tareas;
     }
     
+    public EstadoProyecto getStatus() {
+        return status;
+    }
+    
+    public void setStatus(EstadoProyecto status) {
+        this.status = status;
+    }
+    
     @PrePersist
     protected void onCreate() {
         fechaCreacion = LocalDateTime.now();
+        if (status == null) {
+            status = EstadoProyecto.ACTIVE;
+        }
     }
 }

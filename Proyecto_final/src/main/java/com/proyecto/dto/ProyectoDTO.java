@@ -1,24 +1,32 @@
 package com.proyecto.dto;
 
+import com.proyecto.entity.EstadoProyecto;
 import jakarta.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 public class ProyectoDTO {
     private Long id;
     
     @NotBlank(message = "El nombre del proyecto es obligatorio")
-    private String nombre;
+    private String name;
     
-    private String descripcion;
-    private LocalDateTime fechaCreacion;
+    private String description;
+    
+    @NotNull(message = "La fecha de inicio es obligatoria")
+    private LocalDate startDate;
+    
+    @NotNull(message = "El estado es obligatorio")
+    private EstadoProyecto status;
     
     public ProyectoDTO() {}
     
-    public ProyectoDTO(Long id, String nombre, String descripcion, LocalDateTime fechaCreacion) {
+    public ProyectoDTO(Long id, String name, String description, LocalDate startDate, EstadoProyecto status) {
         this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.fechaCreacion = fechaCreacion;
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.status = status;
     }
     
     public Long getId() {
@@ -29,27 +37,35 @@ public class ProyectoDTO {
         this.id = id;
     }
     
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
     
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String name) {
+        this.name = name;
     }
     
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
     
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
     
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
+    public LocalDate getStartDate() {
+        return startDate;
     }
     
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+    
+    public EstadoProyecto getStatus() {
+        return status;
+    }
+    
+    public void setStatus(EstadoProyecto status) {
+        this.status = status;
     }
 }

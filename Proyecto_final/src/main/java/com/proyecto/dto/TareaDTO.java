@@ -10,40 +10,37 @@ public class TareaDTO {
     private Long id;
     
     @NotBlank(message = "El título es obligatorio")
-    private String titulo;
+    private String title;
     
-    private String descripcion;
+    private String description;
     
     @NotNull(message = "El estado es obligatorio")
-    private EstadoTarea estado;
+    private EstadoTarea status;
     
     @NotNull(message = "La prioridad es obligatoria")
-    private PrioridadTarea prioridad;
+    private PrioridadTarea priority;
     
-    private String usuarioAsignado;
+    private Long assigneeId;
     
     @NotNull(message = "El proyecto es obligatorio")
-    private Long proyectoId;
+    private Long projectId;
     
-    private String proyectoNombre;
-    private LocalDateTime fechaCreacion;
-    private LocalDateTime fechaActualizacion;
+    private ProyectoDTO project;
+    private LocalDateTime createdAt;
     
     public TareaDTO() {}
     
-    public TareaDTO(Long id, String titulo, String descripcion, EstadoTarea estado, PrioridadTarea prioridad,
-                    String usuarioAsignado, Long proyectoId, String proyectoNombre, 
-                    LocalDateTime fechaCreacion, LocalDateTime fechaActualizacion) {
+    public TareaDTO(Long id, String title, String description, EstadoTarea status, PrioridadTarea priority,
+                    Long assigneeId, Long projectId, ProyectoDTO project, LocalDateTime createdAt) {
         this.id = id;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.estado = estado;
-        this.prioridad = prioridad;
-        this.usuarioAsignado = usuarioAsignado;
-        this.proyectoId = proyectoId;
-        this.proyectoNombre = proyectoNombre;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaActualizacion = fechaActualizacion;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.priority = priority;
+        this.assigneeId = assigneeId;
+        this.projectId = projectId;
+        this.project = project;
+        this.createdAt = createdAt;
     }
     
     public Long getId() {
@@ -54,75 +51,67 @@ public class TareaDTO {
         this.id = id;
     }
     
-    public String getTitulo() {
-        return titulo;
+    public String getTitle() {
+        return title;
     }
     
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setTitle(String title) {
+        this.title = title;
     }
     
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
     
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
     
-    public EstadoTarea getEstado() {
-        return estado;
+    public EstadoTarea getStatus() {
+        return status;
     }
     
-    public void setEstado(EstadoTarea estado) {
-        this.estado = estado;
+    public void setStatus(EstadoTarea status) {
+        this.status = status;
     }
     
-    public PrioridadTarea getPrioridad() {
-        return prioridad;
+    public PrioridadTarea getPriority() {
+        return priority;
     }
     
-    public void setPrioridad(PrioridadTarea prioridad) {
-        this.prioridad = prioridad;
+    public void setPriority(PrioridadTarea priority) {
+        this.priority = priority;
     }
     
-    public String getUsuarioAsignado() {
-        return usuarioAsignado;
+    public Long getAssigneeId() {
+        return assigneeId;
     }
     
-    public void setUsuarioAsignado(String usuarioAsignado) {
-        this.usuarioAsignado = usuarioAsignado;
+    public void setAssigneeId(Long assigneeId) {
+        this.assigneeId = assigneeId;
     }
     
-    public Long getProyectoId() {
-        return proyectoId;
+    public Long getProjectId() {
+        return projectId;
     }
     
-    public void setProyectoId(Long proyectoId) {
-        this.proyectoId = proyectoId;
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
     
-    public String getProyectoNombre() {
-        return proyectoNombre;
+    public ProyectoDTO getProject() {
+        return project;
     }
     
-    public void setProyectoNombre(String proyectoNombre) {
-        this.proyectoNombre = proyectoNombre;
+    public void setProject(ProyectoDTO project) {
+        this.project = project;
     }
     
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
     
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-    
-    public LocalDateTime getFechaActualizacion() {
-        return fechaActualizacion;
-    }
-    
-    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
-        this.fechaActualizacion = fechaActualizacion;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/proyectos")
-@Tag(name = "Proyectos", description = "API para gestión de proyectos")
+@RequestMapping("/api/projects")
+@Tag(name = "Projects", description = "API para gestión de proyectos")
 public class ProyectoController {
     
     private final ProyectoService proyectoService;
@@ -29,9 +29,12 @@ public class ProyectoController {
     }
     
     @GetMapping
-    @Operation(summary = "Obtener todos los proyectos")
-    public ResponseEntity<List<ProyectoDTO>> obtenerTodos() {
-        List<ProyectoDTO> proyectos = proyectoService.obtenerTodos();
+    @Operation(summary = "Obtener todos los proyectos con paginación")
+    public ResponseEntity<org.springframework.data.domain.Page<ProyectoDTO>> obtenerTodos(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name,asc") String sort) {
+        org.springframework.data.domain.Page<ProyectoDTO> proyectos = proyectoService.obtenerTodos(page, size, sort);
         return ResponseEntity.ok(proyectos);
     }
     

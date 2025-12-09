@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tareas")
-@Tag(name = "Tareas", description = "API para gestión de tareas")
+@RequestMapping("/api/tasks")
+@Tag(name = "Tasks", description = "API para gestión de tareas")
 public class TareaController {
     
     private final TareaService tareaService;
@@ -31,27 +31,27 @@ public class TareaController {
     }
     
     @GetMapping
-    @Operation(summary = "Obtener todas las tareas con filtros opcionales")
-    public ResponseEntity<List<TareaDTO>> obtenerTodas(
-            @RequestParam(required = false) EstadoTarea estado,
-            @RequestParam(required = false) PrioridadTarea prioridad,
-            @RequestParam(required = false) Long proyectoId) {
+    @Operation(summary = "Obtener todas las tareas con paginación y filtros")
+    public ResponseEntity<org.springframework.data.domain.Page<TareaDTO>> obtenerTodas(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String priority,
+            @RequestParam(required = false) Long projectId,
+            @RequestParam(required = false) Long assigneeId) {
         
-        List<TareaDTO> tareas;
-        
-        if (estado != null && prioridad != null) {
-            tareas = tareaService.filtrarPorEstadoYPrioridad(estado, prioridad);
-        } else if (estado != null) {
-            tareas = tareaService.filtrarPorEstado(estado);
-        } else if (prioridad != null) {
-            tareas = tareaService.filtrarPorPrioridad(prioridad);
-        } else if (proyectoId != null) {
-            tareas = tareaService.filtrarPorProyecto(proyectoId);
-        } else {
-            tareas = tareaService.obtenerTodas();
-        }
+        org.springframework.data.domain.Page<TareaDTO> tareas = tareaService.obtenerTodas(
+            page, size, sort, status, priority, projectId, assigneeId);
         
         return ResponseEntity.ok(tareas);
+    }
+    
+    @GetMapping("/stats/by-status")
+    @Operation(summary = "Obtener estadísticas de tareas por estado")
+    public ResponseEntity<java.util.Map<String, Long>> obtenerEstadisticasPorEstado() {
+        java.util.Map<String, Long> stats = tareaService.obtenerEstadisticasPorEstado();
+        return ResponseEntity.ok(stats);
     }
     
     @GetMapping("/{id}")
