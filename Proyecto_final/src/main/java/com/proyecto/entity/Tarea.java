@@ -12,45 +12,41 @@ public class Tarea {
     private Long id;
     
     @Column(nullable = false)
-    private String titulo;
+    private String title;
     
     @Column(length = 2000)
-    private String descripcion;
+    private String description;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EstadoTarea estado;
+    private EstadoTarea status;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PrioridadTarea prioridad;
+    private PrioridadTarea priority;
     
-    @Column(name = "usuario_asignado")
-    private String usuarioAsignado;
+    @Column(name = "assignee_id")
+    private Long assigneeId;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "proyecto_id", nullable = false)
+    @JoinColumn(name = "project_id", nullable = false)
     private Proyecto proyecto;
     
-    @Column(name = "fecha_creacion", nullable = false, updatable = false)
-    private LocalDateTime fechaCreacion;
-    
-    @Column(name = "fecha_actualizacion")
-    private LocalDateTime fechaActualizacion;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
     
     public Tarea() {}
     
-    public Tarea(Long id, String titulo, String descripcion, EstadoTarea estado, PrioridadTarea prioridad, 
-                 String usuarioAsignado, Proyecto proyecto, LocalDateTime fechaCreacion, LocalDateTime fechaActualizacion) {
+    public Tarea(Long id, String title, String description, EstadoTarea status, PrioridadTarea priority, 
+                 Long assigneeId, Proyecto proyecto, LocalDateTime createdAt) {
         this.id = id;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.estado = estado;
-        this.prioridad = prioridad;
-        this.usuarioAsignado = usuarioAsignado;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.priority = priority;
+        this.assigneeId = assigneeId;
         this.proyecto = proyecto;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaActualizacion = fechaActualizacion;
+        this.createdAt = createdAt;
     }
     
     public Long getId() {
@@ -61,44 +57,44 @@ public class Tarea {
         this.id = id;
     }
     
-    public String getTitulo() {
-        return titulo;
+    public String getTitle() {
+        return title;
     }
     
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setTitle(String title) {
+        this.title = title;
     }
     
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
     
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
     
-    public EstadoTarea getEstado() {
-        return estado;
+    public EstadoTarea getStatus() {
+        return status;
     }
     
-    public void setEstado(EstadoTarea estado) {
-        this.estado = estado;
+    public void setStatus(EstadoTarea status) {
+        this.status = status;
     }
     
-    public PrioridadTarea getPrioridad() {
-        return prioridad;
+    public PrioridadTarea getPriority() {
+        return priority;
     }
     
-    public void setPrioridad(PrioridadTarea prioridad) {
-        this.prioridad = prioridad;
+    public void setPriority(PrioridadTarea priority) {
+        this.priority = priority;
     }
     
-    public String getUsuarioAsignado() {
-        return usuarioAsignado;
+    public Long getAssigneeId() {
+        return assigneeId;
     }
     
-    public void setUsuarioAsignado(String usuarioAsignado) {
-        this.usuarioAsignado = usuarioAsignado;
+    public void setAssigneeId(Long assigneeId) {
+        this.assigneeId = assigneeId;
     }
     
     public Proyecto getProyecto() {
@@ -109,30 +105,24 @@ public class Tarea {
         this.proyecto = proyecto;
     }
     
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
     
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-    
-    public LocalDateTime getFechaActualizacion() {
-        return fechaActualizacion;
-    }
-    
-    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
-        this.fechaActualizacion = fechaActualizacion;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
     
     @PrePersist
     protected void onCreate() {
-        fechaCreacion = LocalDateTime.now();
-        fechaActualizacion = LocalDateTime.now();
-    }
-    
-    @PreUpdate
-    protected void onUpdate() {
-        fechaActualizacion = LocalDateTime.now();
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+        if (status == null) {
+            status = EstadoTarea.TODO;
+        }
+        if (priority == null) {
+            priority = PrioridadTarea.MEDIUM;
+        }
     }
 }

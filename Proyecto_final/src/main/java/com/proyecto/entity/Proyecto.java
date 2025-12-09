@@ -13,13 +13,13 @@ public class Proyecto {
     private Long id;
     
     @Column(nullable = false)
-    private String nombre;
+    private String name;
     
     @Column(length = 1000)
-    private String descripcion;
+    private String description;
     
-    @Column(name = "fecha_creacion", nullable = false, updatable = false)
-    private LocalDateTime fechaCreacion;
+    @Column(name = "start_date", nullable = false)
+    private LocalDateTime startDate;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -30,11 +30,11 @@ public class Proyecto {
     
     public Proyecto() {}
     
-    public Proyecto(Long id, String nombre, String descripcion, LocalDateTime fechaCreacion, EstadoProyecto status, List<Tarea> tareas) {
+    public Proyecto(Long id, String name, String description, LocalDateTime startDate, EstadoProyecto status, List<Tarea> tareas) {
         this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.fechaCreacion = fechaCreacion;
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
         this.status = status;
         this.tareas = tareas;
     }
@@ -47,28 +47,28 @@ public class Proyecto {
         this.id = id;
     }
     
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
     
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String name) {
+        this.name = name;
     }
     
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
     
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
     
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
     
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
     }
     
     public List<Tarea> getTareas() {
@@ -89,7 +89,9 @@ public class Proyecto {
     
     @PrePersist
     protected void onCreate() {
-        fechaCreacion = LocalDateTime.now();
+        if (startDate == null) {
+            startDate = LocalDateTime.now();
+        }
         if (status == null) {
             status = EstadoProyecto.ACTIVE;
         }

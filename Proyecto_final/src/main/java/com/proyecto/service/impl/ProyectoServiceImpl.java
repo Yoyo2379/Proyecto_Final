@@ -4,10 +4,15 @@ import com.proyecto.dto.ProyectoDTO;
 import com.proyecto.entity.Proyecto;
 import com.proyecto.repository.ProyectoRepository;
 import com.proyecto.service.ProyectoService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class ProyectoServiceImpl implements ProyectoService {
@@ -22,8 +27,10 @@ public class ProyectoServiceImpl implements ProyectoService {
     @Transactional
     public ProyectoDTO crear(ProyectoDTO proyectoDTO) {
         Proyecto proyecto = new Proyecto();
-        proyecto.setNombre(proyectoDTO.getNombre());
-        proyecto.setDescripcion(proyectoDTO.getDescripcion());
+        proyecto.setName(proyectoDTO.getName());
+        proyecto.setDescription(proyectoDTO.getDescription());
+        proyecto.setStartDate(convertToLocalDateTime(proyectoDTO.getStartDate()));
+        proyecto.setStatus(proyectoDTO.getStatus());
         
         Proyecto guardado = proyectoRepository.save(proyecto);
         return convertirADTO(guardado);
@@ -35,8 +42,10 @@ public class ProyectoServiceImpl implements ProyectoService {
         Proyecto proyecto = proyectoRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Proyecto no encontrado con id: " + id));
         
-        proyecto.setNombre(proyectoDTO.getNombre());
-        proyecto.setDescripcion(proyectoDTO.getDescripcion());
+        proyecto.setName(proyectoDTO.getName());
+        proyecto.setDescription(proyectoDTO.getDescription());
+        proyecto.setStartDate(convertToLocalDateTime(proyectoDTO.getStartDate()));
+        proyecto.setStatus(proyectoDTO.getStatus());
         
         Proyecto actualizado = proyectoRepository.save(proyecto);
         return convertirADTO(actualizado);
@@ -61,18 +70,41 @@ public class ProyectoServiceImpl implements ProyectoService {
     
     @Override
     @Transactional(readOnly = true)
-    public List<ProyectoDTO> obtenerTodos() {
-        return proyectoRepository.findAll().stream()
-            .map(this::convertirADTO)
-            .collect(Collectors.toList());
+    public Page<ProyectoDTO> obtenerTodos(int page, int size, String sort) {
+        // Parsear el sort (formato: "campo,direccion")
+        String[] sortParams = sort.split(",");
+        String sortField = sortParams[0];
+        Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc") 
+            ? Sort.Direction.DESC 
+            : Sort.Direction.ASC;
+        
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
+        Page<Proyecto> proyectos = proyectoRepository.findAll(pageable);
+        
+        return proyectos.map(this::convertirADTO);
     }
     
     private ProyectoDTO convertirADTO(Proyecto proyecto) {
         ProyectoDTO dto = new ProyectoDTO();
         dto.setId(proyecto.getId());
-        dto.setNombre(proyecto.getNombre());
-        dto.setDescripcion(proyecto.getDescripcion());
-        dto.setFechaCreacion(proyecto.getFechaCreacion());
+        dto.setName(proyecto.getName());
+        dto.setDescription(proyecto.getDescription());
+        dto.setStartDate(convertToLocalDate(proyecto.getStartDate()));
+        dto.setStatus(proyecto.getStatus());
         return dto;
+    }
+    
+    private LocalDateTime convertToLocalDateTime(LocalDate localDate) {
+        if (localDate == null) {
+            return LocalDateTime.now();
+        }
+        return localDate.atStartOfDay();
+    }
+    
+    private LocalDate convertToLocalDate(LocalDateTime localDateTime) {
+        if (localDateTime == null) {
+            return LocalDate.now();
+        }
+        return localDateTime.toLocalDate();
     }
 }

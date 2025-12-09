@@ -1,6 +1,6 @@
 package com.proyecto.service.impl;
 
-import com.proyecto.dto.DashboardDTO;
+import com.proyecto.dto.ProyectoDTO;
 import com.proyecto.dto.TareaDTO;
 import com.proyecto.entity.EstadoTarea;
 import com.proyecto.entity.PrioridadTarea;
@@ -9,12 +9,19 @@ import com.proyecto.entity.Tarea;
 import com.proyecto.repository.ProyectoRepository;
 import com.proyecto.repository.TareaRepository;
 import com.proyecto.service.TareaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class TareaServiceImpl implements TareaService {
@@ -30,15 +37,15 @@ public class TareaServiceImpl implements TareaService {
     @Override
     @Transactional
     public TareaDTO crear(TareaDTO tareaDTO) {
-        Proyecto proyecto = proyectoRepository.findById(tareaDTO.getProyectoId())
-            .orElseThrow(() -> new RuntimeException("Proyecto no encontrado con id: " + tareaDTO.getProyectoId()));
+        Proyecto proyecto = proyectoRepository.findById(tareaDTO.getProjectId())
+            .orElseThrow(() -> new RuntimeException("Proyecto no encontrado con id: " + tareaDTO.getProjectId()));
         
         Tarea tarea = new Tarea();
-        tarea.setTitulo(tareaDTO.getTitulo());
-        tarea.setDescripcion(tareaDTO.getDescripcion());
-        tarea.setEstado(tareaDTO.getEstado());
-        tarea.setPrioridad(tareaDTO.getPrioridad());
-        tarea.setUsuarioAsignado(tareaDTO.getUsuarioAsignado());
+        tarea.setTitle(tareaDTO.getTitle());
+        tarea.setDescription(tareaDTO.getDescription());
+        tarea.setStatus(tareaDTO.getStatus());
+        tarea.setPriority(tareaDTO.getPriority());
+        tarea.setAssigneeId(tareaDTO.getAssigneeId());
         tarea.setProyecto(proyecto);
         
         Tarea guardada = tareaRepository.save(tarea);
@@ -51,17 +58,17 @@ public class TareaServiceImpl implements TareaService {
         Tarea tarea = tareaRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Tarea no encontrada con id: " + id));
         
-        if (tareaDTO.getProyectoId() != null && !tareaDTO.getProyectoId().equals(tarea.getProyecto().getId())) {
-            Proyecto proyecto = proyectoRepository.findById(tareaDTO.getProyectoId())
-                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado con id: " + tareaDTO.getProyectoId()));
+        tarea.setTitle(tareaDTO.getTitle());
+        tarea.setDescription(tareaDTO.getDescription());
+        tarea.setStatus(tareaDTO.getStatus());
+        tarea.setPriority(tareaDTO.getPriority());
+        tarea.setAssigneeId(tareaDTO.getAssigneeId());
+        
+        if (tareaDTO.getProjectId() != null && !tareaDTO.getProjectId().equals(tarea.getProyecto().getId())) {
+            Proyecto proyecto = proyectoRepository.findById(tareaDTO.getProjectId())
+                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado con id: " + tareaDTO.getProjectId()));
             tarea.setProyecto(proyecto);
         }
-        
-        tarea.setTitulo(tareaDTO.getTitulo());
-        tarea.setDescripcion(tareaDTO.getDescripcion());
-        tarea.setEstado(tareaDTO.getEstado());
-        tarea.setPrioridad(tareaDTO.getPrioridad());
-        tarea.setUsuarioAsignado(tareaDTO.getUsuarioAsignado());
         
         Tarea actualizada = tareaRepository.save(tarea);
         return convertirADTO(actualizada);
@@ -86,79 +93,85 @@ public class TareaServiceImpl implements TareaService {
     
     @Override
     @Transactional(readOnly = true)
-    public List<TareaDTO> obtenerTodas() {
-        return tareaRepository.findAll().stream()
-            .map(this::convertirADTO)
-            .collect(Collectors.toList());
-    }
-    
-    @Override
-    @Transactional(readOnly = true)
-    public List<TareaDTO> filtrarPorEstado(EstadoTarea estado) {
-        return tareaRepository.findByEstado(estado).stream()
-            .map(this::convertirADTO)
-            .collect(Collectors.toList());
-    }
-    
-    @Override
-    @Transactional(readOnly = true)
-    public List<TareaDTO> filtrarPorPrioridad(PrioridadTarea prioridad) {
-        return tareaRepository.findByPrioridad(prioridad).stream()
-            .map(this::convertirADTO)
-            .collect(Collectors.toList());
-    }
-    
-    @Override
-    @Transactional(readOnly = true)
-    public List<TareaDTO> filtrarPorProyecto(Long proyectoId) {
-        return tareaRepository.findByProyectoId(proyectoId).stream()
-            .map(this::convertirADTO)
-            .collect(Collectors.toList());
-    }
-    
-    @Override
-    @Transactional(readOnly = true)
-    public List<TareaDTO> filtrarPorEstadoYPrioridad(EstadoTarea estado, PrioridadTarea prioridad) {
-        return tareaRepository.findByEstadoAndPrioridad(estado, prioridad).stream()
-            .map(this::convertirADTO)
-            .collect(Collectors.toList());
-    }
-    
-    @Override
-    @Transactional(readOnly = true)
-    public DashboardDTO obtenerDashboard() {
-        DashboardDTO dashboard = new DashboardDTO();
+    public Page<TareaDTO> obtenerTodas(int page, int size, String sort, String status, String priority, Long projectId, Long assigneeId) {
+        // Parsear el sort
+        String[] sortParams = sort.split(",");
+        String sortField = sortParams[0];
+        Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc") 
+            ? Sort.Direction.DESC 
+            : Sort.Direction.ASC;
         
-        dashboard.setTotalTareas(tareaRepository.count());
-        dashboard.setTotalProyectos(proyectoRepository.count());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
         
-        Map<String, Long> tareasPorEstado = new HashMap<>();
-        for (EstadoTarea estado : EstadoTarea.values()) {
-            tareasPorEstado.put(estado.name(), tareaRepository.countByEstado(estado));
-        }
-        dashboard.setTareasPorEstado(tareasPorEstado);
+        // Crear especificación para filtros
+        Specification<Tarea> spec = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            
+            if (status != null && !status.isEmpty()) {
+                try {
+                    EstadoTarea estadoTarea = EstadoTarea.fromValue(status);
+                    predicates.add(criteriaBuilder.equal(root.get("status"), estadoTarea));
+                } catch (IllegalArgumentException e) {
+                    // Ignorar si el estado no es válido
+                }
+            }
+            
+            if (priority != null && !priority.isEmpty()) {
+                try {
+                    PrioridadTarea prioridadTarea = PrioridadTarea.fromValue(priority);
+                    predicates.add(criteriaBuilder.equal(root.get("priority"), prioridadTarea));
+                } catch (IllegalArgumentException e) {
+                    // Ignorar si la prioridad no es válida
+                }
+            }
+            
+            if (projectId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("proyecto").get("id"), projectId));
+            }
+            
+            if (assigneeId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("assigneeId"), assigneeId));
+            }
+            
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
         
-        Map<String, Long> tareasPorPrioridad = new HashMap<>();
-        for (PrioridadTarea prioridad : PrioridadTarea.values()) {
-            tareasPorPrioridad.put(prioridad.name(), tareaRepository.countByPrioridad(prioridad));
-        }
-        dashboard.setTareasPorPrioridad(tareasPorPrioridad);
+        Page<Tarea> tareas = tareaRepository.findAll(spec, pageable);
+        return tareas.map(this::convertirADTO);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Long> obtenerEstadisticasPorEstado() {
+        List<Tarea> todasLasTareas = tareaRepository.findAll();
         
-        return dashboard;
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("todo", todasLasTareas.stream().filter(t -> t.getStatus() == EstadoTarea.TODO).count());
+        stats.put("in_progress", todasLasTareas.stream().filter(t -> t.getStatus() == EstadoTarea.IN_PROGRESS).count());
+        stats.put("completed", todasLasTareas.stream().filter(t -> t.getStatus() == EstadoTarea.COMPLETED).count());
+        
+        return stats;
     }
     
     private TareaDTO convertirADTO(Tarea tarea) {
         TareaDTO dto = new TareaDTO();
         dto.setId(tarea.getId());
-        dto.setTitulo(tarea.getTitulo());
-        dto.setDescripcion(tarea.getDescripcion());
-        dto.setEstado(tarea.getEstado());
-        dto.setPrioridad(tarea.getPrioridad());
-        dto.setUsuarioAsignado(tarea.getUsuarioAsignado());
-        dto.setProyectoId(tarea.getProyecto().getId());
-        dto.setProyectoNombre(tarea.getProyecto().getNombre());
-        dto.setFechaCreacion(tarea.getFechaCreacion());
-        dto.setFechaActualizacion(tarea.getFechaActualizacion());
+        dto.setTitle(tarea.getTitle());
+        dto.setDescription(tarea.getDescription());
+        dto.setStatus(tarea.getStatus());
+        dto.setPriority(tarea.getPriority());
+        dto.setAssigneeId(tarea.getAssigneeId());
+        dto.setProjectId(tarea.getProyecto().getId());
+        dto.setCreatedAt(tarea.getCreatedAt());
+        
+        // Agregar información del proyecto
+        if (tarea.getProyecto() != null) {
+            ProyectoDTO proyectoDTO = new ProyectoDTO();
+            proyectoDTO.setId(tarea.getProyecto().getId());
+            proyectoDTO.setName(tarea.getProyecto().getName());
+            dto.setProject(proyectoDTO);
+        }
+        
         return dto;
     }
 }
