@@ -20,10 +20,10 @@ public class DashboardController {
         this.tareaService = tareaService;
     }
     
-    @GetMapping
+    @GetMapping("/stats")
     @Operation(summary = "Obtener estadísticas del dashboard")
-    public ResponseEntity<DashboardDTO> obtenerDashboard() {
-        DashboardDTO dashboard = tareaService.obtenerDashboard();
-        return ResponseEntity.ok(dashboard);
+    public ResponseEntity<java.util.Map<String, Long>> obtenerEstadisticas() {
+        java.util.Map<String, Long> stats = tareaService.obtenerEstadisticasPorEstado();
+        return ResponseEntity.ok(stats);
     }
 }
