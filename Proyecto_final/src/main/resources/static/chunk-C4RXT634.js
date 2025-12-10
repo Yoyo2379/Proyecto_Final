@@ -1,0 +1,1 @@
+import"./chunk-7CGTOI24.js";var t=[{path:"",loadComponent:()=>import("./chunk-VYDGWXZ5.js").then(o=>o.ProjectListComponent)},{path:"new",loadComponent:()=>import("./chunk-O5CR37JV.js").then(o=>o.ProjectFormComponent)},{path:":id/edit",loadComponent:()=>import("./chunk-O5CR37JV.js").then(o=>o.ProjectFormComponent)}];export{t as PROJECT_ROUTES};
