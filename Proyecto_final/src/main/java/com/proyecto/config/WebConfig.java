@@ -14,9 +14,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Servir archivos estáticos de Angular
+        // Servir archivos estáticos de Angular desde /static/browser/
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/")
+                .addResourceLocations("classpath:/static/browser/")
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver() {
                     @Override
@@ -29,8 +29,8 @@ public class WebConfig implements WebMvcConfigurer {
                         }
                         
                         // Si no existe y no es una ruta de API, devolver index.html para Angular routing
-                        if (!resourcePath.startsWith("api/")) {
-                            return new ClassPathResource("/static/index.html");
+                        if (!resourcePath.startsWith("api/") && !resourcePath.startsWith("swagger-ui")) {
+                            return new ClassPathResource("/static/browser/index.html");
                         }
                         
                         return null;
