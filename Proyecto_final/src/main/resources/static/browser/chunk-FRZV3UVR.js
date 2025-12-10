@@ -1,0 +1,1 @@
+import"./chunk-7CGTOI24.js";var t=[{path:"",loadComponent:()=>import("./chunk-CZPW77AC.js").then(o=>o.TaskListComponent)},{path:"new",loadComponent:()=>import("./chunk-KMMODEUB.js").then(o=>o.TaskFormComponent)},{path:":id/edit",loadComponent:()=>import("./chunk-KMMODEUB.js").then(o=>o.TaskFormComponent)}];export{t as TASK_ROUTES};

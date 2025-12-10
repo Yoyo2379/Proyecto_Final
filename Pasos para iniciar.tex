@@ -1,0 +1,357 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+
+% Configuración de página
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{Sistema de Gestión de Tareas y Proyectos}}
+\fancyhead[R]{\thepage}
+\fancyfoot[C]{\textit{Angular 21 + Spring Boot 3.2}}
+
+% Configuración de colores
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Configuración de código
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Configuración de cajas
+\newtcolorbox{infobox}[1]{
+    colback=blue!5!white,
+    colframe=blue!75!black,
+    title=#1,
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{successbox}[1]{
+    colback=green!5!white,
+    colframe=green!75!black,
+    title=#1,
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{warningbox}[1]{
+    colback=orange!5!white,
+    colframe=orange!75!black,
+    title=#1,
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{errorbox}[1]{
+    colback=red!5!white,
+    colframe=red!75!black,
+    title=#1,
+    fonttitle=\bfseries
+}
+
+\begin{document}
+
+% Título
+\begin{center}
+    {\Huge \textbf{Pasos para iniciar}}\\[0.5cm]
+    {\Large Sistema de Gestión de Tareas y Proyectos}\\[0.3cm]
+    {\large Angular 21 + Spring Boot 3.2 + MySQL}\\[0.5cm]
+    \rule{\linewidth}{0.5mm}
+\end{center}
+
+\vspace{1cm}
+
+\section{Requisitos Previos}
+
+\begin{infobox}{Verificar Instalaciones}
+Antes de iniciar el sistema, asegúrese de tener instalado:
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Java 17 o superior}
+    \item \textbf{Node.js 18 o superior}
+    \item \textbf{MySQL Server 8.0}
+    \item \textbf{Maven 3.6 o superior}
+    \item \textbf{npm 9 o superior}
+\end{itemize}
+\end{infobox}
+
+\section{Paso 1: Verificar MySQL Server}
+
+\subsection{Opción A: Verificar desde Servicios de Windows}
+
+\begin{lstlisting}[language=bash, caption=Abrir Servicios de Windows]
+services.msc
+\end{lstlisting}
+
+\begin{enumerate}
+    \item Buscar ``MySQL80'' o ``MySQL'' en la lista de servicios
+    \item El estado debe ser ``En ejecución'' (Running)
+    \item Si no está corriendo, hacer clic derecho $\rightarrow$ ``Iniciar''
+\end{enumerate}
+
+\subsection{Opción B: Verificar desde línea de comandos}
+
+\begin{lstlisting}[language=bash, caption=Verificar puerto MySQL]
+netstat -an | findstr :3306
+\end{lstlisting}
+
+\begin{successbox}{Resultado Esperado}
+Si MySQL está corriendo, debería ver:
+\begin{verbatim}
+TCP    0.0.0.0:3306           0.0.0.0:0              LISTENING
+\end{verbatim}
+\end{successbox}
+
+\subsection{Opción C: Iniciar MySQL si no está corriendo}
+
+\begin{lstlisting}[language=bash, caption=Iniciar servicio MySQL]
+net start MySQL80
+\end{lstlisting}
+
+\section{Paso 2: Preparar el Entorno}
+
+\subsection{Navegar al directorio del proyecto}
+
+\begin{lstlisting}[language=bash, caption=Cambiar al directorio del proyecto]
+cd "C:\Users\oswal\Desktop\Proyecto monroy"
+\end{lstlisting}
+
+\subsection{Verificar estructura del proyecto}
+
+\begin{lstlisting}[language=bash, caption=Listar contenido del directorio]
+dir
+\end{lstlisting}
+
+\begin{infobox}{Estructura Esperada}
+Debería ver las siguientes carpetas:
+\begin{itemize}
+    \item \texttt{fronted/} - Aplicación Angular
+    \item \texttt{Proyecto\_final/} - Aplicación Spring Boot
+\end{itemize}
+\end{infobox}
+
+\section{Paso 3: Iniciar el Backend (Spring Boot)}
+
+\subsection{Abrir primera terminal}
+
+\begin{lstlisting}[language=bash, caption=Navegar al backend e iniciar]
+cd Proyecto_final
+mvn spring-boot:run
+\end{lstlisting}
+
+\subsection{Verificar inicio exitoso}
+
+\begin{successbox}{Señales de Éxito}
+El backend está funcionando cuando vea:
+\begin{itemize}
+    \item \texttt{Started GestionTareasApplication in X.XXX seconds}
+    \item \texttt{Tomcat started on port(s): 8080}
+    \item No aparecen errores de conexión a MySQL
+    \item La consola se queda ``esperando'' (no regresa al prompt)
+\end{itemize}
+\end{successbox}
+
+\begin{warningbox}{Tiempo de Inicio}
+El backend puede tardar entre 30-60 segundos en iniciar completamente.
+\end{warningbox}
+
+\section{Paso 4: Verificar Backend Funcionando}
+
+\subsection{Probar API REST}
+
+\begin{lstlisting}[language=bash, caption=Verificar endpoint de proyectos]
+curl http://localhost:8080/api/projects
+\end{lstlisting}
+
+\subsection{Verificar Swagger UI}
+
+Abrir en navegador: \url{http://localhost:8080/swagger-ui.html}
+
+\begin{successbox}{Verificación Exitosa}
+Si el backend funciona correctamente:
+\begin{itemize}
+    \item El comando curl devuelve JSON con proyectos
+    \item Swagger UI carga la documentación de la API
+    \item No hay errores en la consola del backend
+\end{itemize}
+\end{successbox}
+
+\section{Paso 5: Iniciar el Frontend (Angular)}
+
+\subsection{Abrir segunda terminal}
+
+\begin{lstlisting}[language=bash, caption=Navegar al frontend e iniciar]
+cd "C:\Users\oswal\Desktop\Proyecto monroy"
+cd fronted
+npm start
+\end{lstlisting}
+
+\subsection{Verificar compilación}
+
+\begin{successbox}{Señales de Éxito}
+El frontend está funcionando cuando vea:
+\begin{itemize}
+    \item \texttt{Local: http://localhost:4200/}
+    \item \texttt{webpack compiled successfully}
+    \item Se abre automáticamente el navegador
+    \item No hay errores de compilación
+\end{itemize}
+\end{successbox}
+
+\begin{warningbox}{Tiempo de Compilación}
+El frontend puede tardar entre 30-45 segundos en compilar completamente.
+\end{warningbox}
+
+\section{Paso 6: Verificación Final}
+
+\subsection{URLs del Sistema}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Componente} & \textbf{URL} \\
+\hline
+Aplicación Web & \url{http://localhost:4200} \\
+\hline
+Documentación Swagger & \url{http://localhost:8080/swagger-ui.html} \\
+\hline
+API REST & \url{http://localhost:8080/api} \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Checklist de Verificación}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{MySQL corriendo:} Puerto 3306 en uso
+    \item \textbf{Backend funcionando:} Puerto 8080 responde
+    \item \textbf{Frontend funcionando:} Puerto 4200 carga la aplicación
+    \item \textbf{Integración:} Dashboard muestra estadísticas reales
+    \item \textbf{Datos:} Listas de proyectos y tareas cargan información
+\end{enumerate}
+
+\section{Solución de Problemas}
+
+\subsection{Si MySQL no inicia}
+
+\begin{errorbox}{Error de MySQL}
+\begin{lstlisting}[language=bash]
+# Iniciar servicio manualmente
+net start MySQL80
+
+# O desde Servicios de Windows
+services.msc
+\end{lstlisting}
+\end{errorbox}
+
+\subsection{Si el Backend no inicia}
+
+\begin{errorbox}{Error de Backend}
+\begin{lstlisting}[language=bash]
+# Verificar Java
+java -version
+
+# Limpiar y reinstalar dependencias
+cd Proyecto_final
+mvn clean install
+mvn spring-boot:run
+\end{lstlisting}
+\end{errorbox}
+
+\subsection{Si el Frontend no inicia}
+
+\begin{errorbox}{Error de Frontend}
+\begin{lstlisting}[language=bash]
+# Verificar Node.js y npm
+node -v
+npm -v
+
+# Limpiar node_modules y reinstalar
+cd fronted
+rmdir /s node_modules
+npm install
+npm start
+\end{lstlisting}
+\end{errorbox}
+
+\section{Comandos Rápidos}
+
+\begin{infobox}{Inicio Rápido}
+Para iniciar el sistema completo en 3 comandos:
+
+\textbf{Terminal 1 - Backend:}
+\begin{lstlisting}[language=bash]
+cd Proyecto_final && mvn spring-boot:run
+\end{lstlisting}
+
+\textbf{Terminal 2 - Frontend:}
+\begin{lstlisting}[language=bash]
+cd fronted && npm start
+\end{lstlisting}
+
+\textbf{Verificación:}
+\begin{lstlisting}[language=bash]
+curl http://localhost:8080/api/projects
+\end{lstlisting}
+\end{infobox}
+
+\section{Información del Sistema}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Componente} & \textbf{Versión/Tecnología} \\
+\hline
+Frontend & Angular 21.0.2 \\
+\hline
+Backend & Spring Boot 3.2.0 \\
+\hline
+Base de Datos & MySQL 8.0 \\
+\hline
+Java & OpenJDK 17 \\
+\hline
+Node.js & 18+ \\
+\hline
+UI Framework & Angular Material \\
+\hline
+Documentación API & Swagger/OpenAPI 3.0 \\
+\hline
+\end{tabular}
+\end{center}
+
+\vfill
+
+\begin{center}
+\rule{\linewidth}{0.5mm}\\
+\textit{Sistema listo para demostración y evaluación}\\
+\textbf{¡Éxito garantizado!}
+\end{center}
+
+\end{document}
