@@ -13,7 +13,6 @@
 \usepackage{hyperref}
 \usepackage{tcolorbox}
 
-% Configuración de página
 \geometry{margin=2.5cm}
 \pagestyle{fancy}
 \fancyhf{}
@@ -21,13 +20,12 @@
 \fancyhead[R]{\thepage}
 \fancyfoot[C]{\textit{Angular 21 + Spring Boot 3.2}}
 
-% Configuración de colores
+
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
-% Configuración de código
 \lstdefinestyle{mystyle}{
     backgroundcolor=\color{backcolour},   
     commentstyle=\color{codegreen},
@@ -48,7 +46,6 @@
 }
 \lstset{style=mystyle}
 
-% Configuración de cajas
 \newtcolorbox{infobox}[1]{
     colback=blue!5!white,
     colframe=blue!75!black,
@@ -79,11 +76,11 @@
 
 \begin{document}
 
-% Título
 \begin{center}
     {\Huge \textbf{Pasos para iniciar}}\\[0.5cm]
     {\Large Sistema de Gestión de Tareas y Proyectos}\\[0.3cm]
-    {\large Angular 21 + Spring Boot 3.2 + MySQL}\\[0.5cm]
+    {\large \textbf{SISTEMA UNIFICADO} - Angular 21 + Spring Boot 3.2 + MySQL}\\[0.3cm]
+    {\normalsize \textit{Un solo comando, una sola aplicación}}\\[0.5cm]
     \rule{\linewidth}{0.5mm}
 \end{center}
 
@@ -91,14 +88,21 @@
 
 \section{Requisitos Previos}
 
-\begin{infobox}{Verificar Instalaciones}
-Antes de iniciar el sistema, asegúrese de tener instalado:
+\begin{successbox}{Sistema Simplificado}
+El sistema ahora está completamente unificado. Solo necesitas:
 \begin{itemize}[label=\textbullet]
-    \item \textbf{Java 17 o superior}
-    \item \textbf{Node.js 18 o superior}
-    \item \textbf{MySQL Server 8.0}
-    \item \textbf{Maven 3.6 o superior}
-    \item \textbf{npm 9 o superior}
+    \item \textbf{Java 17 o superior} (REQUERIDO)
+    \item \textbf{MySQL Server 8.0} (REQUERIDO)
+    \item \textbf{JAR ejecutable} (ya compilado)
+\end{itemize}
+\end{successbox}
+
+\begin{infobox}{Ya NO necesitas}
+\begin{itemize}[label=\textbullet]
+    \item Node.js (frontend ya integrado)
+    \item npm (frontend ya compilado)
+    \item Maven (JAR ya compilado)
+    \item Dos terminales (solo una aplicación)
 \end{itemize}
 \end{infobox}
 
@@ -157,88 +161,52 @@ Debería ver las siguientes carpetas:
 \end{itemize}
 \end{infobox}
 
-\section{Paso 3: Iniciar el Backend (Spring Boot)}
+\section{Paso 3: Ejecutar el Sistema Unificado}
 
-\subsection{Abrir primera terminal}
+\subsection{Comando único}
 
-\begin{lstlisting}[language=bash, caption=Navegar al backend e iniciar]
+\begin{lstlisting}[language=bash, caption=Iniciar aplicación completa]
 cd Proyecto_final
-mvn spring-boot:run
+java -jar target/gestion-tareas-1.0.0.jar
 \end{lstlisting}
+
+\begin{successbox}{Una sola aplicación}
+Este comando inicia:
+\begin{itemize}
+    \item Backend Spring Boot (puerto 8080)
+    \item Frontend Angular (integrado)
+    \item API REST completa
+    \item Documentación Swagger
+    \item Interfaz web completa
+\end{itemize}
+\end{successbox}
 
 \subsection{Verificar inicio exitoso}
 
 \begin{successbox}{Señales de Éxito}
-El backend está funcionando cuando vea:
+El sistema está funcionando cuando vea:
 \begin{itemize}
     \item \texttt{Started GestionTareasApplication in X.XXX seconds}
-    \item \texttt{Tomcat started on port(s): 8080}
+    \item \texttt{Tomcat started on port 8080 (http)}
     \item No aparecen errores de conexión a MySQL
     \item La consola se queda ``esperando'' (no regresa al prompt)
 \end{itemize}
 \end{successbox}
 
 \begin{warningbox}{Tiempo de Inicio}
-El backend puede tardar entre 30-60 segundos en iniciar completamente.
+El sistema puede tardar entre 8-15 segundos en iniciar completamente.
 \end{warningbox}
 
-\section{Paso 4: Verificar Backend Funcionando}
+\section{Paso 4: Verificación Final}
 
-\subsection{Probar API REST}
-
-\begin{lstlisting}[language=bash, caption=Verificar endpoint de proyectos]
-curl http://localhost:8080/api/projects
-\end{lstlisting}
-
-\subsection{Verificar Swagger UI}
-
-Abrir en navegador: \url{http://localhost:8080/swagger-ui.html}
-
-\begin{successbox}{Verificación Exitosa}
-Si el backend funciona correctamente:
-\begin{itemize}
-    \item El comando curl devuelve JSON con proyectos
-    \item Swagger UI carga la documentación de la API
-    \item No hay errores en la consola del backend
-\end{itemize}
-\end{successbox}
-
-\section{Paso 5: Iniciar el Frontend (Angular)}
-
-\subsection{Abrir segunda terminal}
-
-\begin{lstlisting}[language=bash, caption=Navegar al frontend e iniciar]
-cd "C:\Users\oswal\Desktop\Proyecto monroy"
-cd fronted
-npm start
-\end{lstlisting}
-
-\subsection{Verificar compilación}
-
-\begin{successbox}{Señales de Éxito}
-El frontend está funcionando cuando vea:
-\begin{itemize}
-    \item \texttt{Local: http://localhost:4200/}
-    \item \texttt{webpack compiled successfully}
-    \item Se abre automáticamente el navegador
-    \item No hay errores de compilación
-\end{itemize}
-\end{successbox}
-
-\begin{warningbox}{Tiempo de Compilación}
-El frontend puede tardar entre 30-45 segundos en compilar completamente.
-\end{warningbox}
-
-\section{Paso 6: Verificación Final}
-
-\subsection{URLs del Sistema}
+\subsection{URLs del Sistema Unificado}
 
 \begin{center}
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Componente} & \textbf{URL} \\
 \hline
-Aplicación Web & \url{http://localhost:4200} \\
+\textbf{Aplicación Web Completa} & \url{http://localhost:8080} \\
 \hline
 Documentación Swagger & \url{http://localhost:8080/swagger-ui.html} \\
 \hline
@@ -247,14 +215,20 @@ API REST & \url{http://localhost:8080/api} \\
 \end{tabular}
 \end{center}
 
+\begin{infobox}{Todo en un solo puerto}
+Ya no necesitas recordar múltiples URLs. Todo está en:
+\textbf{http://localhost:8080}
+\end{infobox}
+
 \subsection{Checklist de Verificación}
 
 \begin{enumerate}[label=\textbf{\arabic*.}]
     \item \textbf{MySQL corriendo:} Puerto 3306 en uso
-    \item \textbf{Backend funcionando:} Puerto 8080 responde
-    \item \textbf{Frontend funcionando:} Puerto 4200 carga la aplicación
-    \item \textbf{Integración:} Dashboard muestra estadísticas reales
-    \item \textbf{Datos:} Listas de proyectos y tareas cargan información
+    \item \textbf{Sistema unificado:} Puerto 8080 responde
+    \item \textbf{Aplicación web:} http://localhost:8080 carga correctamente
+    \item \textbf{Dashboard:} Muestra estadísticas reales de tareas
+    \item \textbf{CRUD completo:} Proyectos y tareas funcionando
+    \item \textbf{Swagger:} Documentación API accesible
 \end{enumerate}
 
 \section{Solución de Problemas}
@@ -271,55 +245,83 @@ services.msc
 \end{lstlisting}
 \end{errorbox}
 
-\subsection{Si el Backend no inicia}
+\subsection{Si el Sistema no inicia}
 
-\begin{errorbox}{Error de Backend}
+\begin{errorbox}{Error del Sistema Unificado}
 \begin{lstlisting}[language=bash]
 # Verificar Java
 java -version
 
-# Limpiar y reinstalar dependencias
+# Si el JAR no existe, recompilar
 cd Proyecto_final
-mvn clean install
-mvn spring-boot:run
+mvn clean package -DskipTests
+
+# Ejecutar nuevamente
+java -jar target/gestion-tareas-1.0.0.jar
 \end{lstlisting}
 \end{errorbox}
 
-\subsection{Si el Frontend no inicia}
+\subsection{Si hay problemas con la aplicación web}
 
-\begin{errorbox}{Error de Frontend}
+\begin{errorbox}{Error de Aplicación Web}
 \begin{lstlisting}[language=bash]
-# Verificar Node.js y npm
-node -v
-npm -v
+# Verificar que el sistema esté corriendo
+curl http://localhost:8080/api/projects
 
-# Limpiar node_modules y reinstalar
-cd fronted
-rmdir /s node_modules
-npm install
-npm start
+# Si la API funciona pero la web no:
+# 1. Limpiar caché del navegador
+# 2. Probar en modo incógnito
+# 3. Verificar consola del navegador (F12)
 \end{lstlisting}
 \end{errorbox}
 
 \section{Comandos Rápidos}
 
-\begin{infobox}{Inicio Rápido}
-Para iniciar el sistema completo en 3 comandos:
+\begin{successbox}{Inicio Ultra Rápido}
+Para iniciar el sistema completo en 2 comandos:
 
-\textbf{Terminal 1 - Backend:}
+\textbf{Paso 1 - Verificar MySQL:}
 \begin{lstlisting}[language=bash]
-cd Proyecto_final && mvn spring-boot:run
+netstat -an | findstr :3306
 \end{lstlisting}
 
-\textbf{Terminal 2 - Frontend:}
+\textbf{Paso 2 - Ejecutar Sistema:}
 \begin{lstlisting}[language=bash]
-cd fronted && npm start
+cd Proyecto_final && java -jar target/gestion-tareas-1.0.0.jar
 \end{lstlisting}
 
-\textbf{Verificación:}
-\begin{lstlisting}[language=bash]
-curl http://localhost:8080/api/projects
-\end{lstlisting}
+\textbf{Listo! Abrir navegador en:} \url{http://localhost:8080}
+\end{successbox}
+
+\section{Ventajas del Sistema Unificado}
+
+\begin{successbox}{Beneficios de la Unificación}
+\begin{itemize}
+    \item \textbf{Un solo comando} para iniciar todo el sistema
+    \item \textbf{Una sola URL} para acceder a toda la aplicación
+    \item \textbf{Sin dependencias externas} (Node.js, npm no requeridos)
+    \item \textbf{Despliegue simplificado} - solo copiar un archivo JAR
+    \item \textbf{Menos errores} - no hay problemas de integración
+    \item \textbf{Más rápido} - no hay compilación en tiempo real
+    \item \textbf{Profesional} - listo para producción
+\end{itemize}
+\end{successbox}
+
+\begin{infobox}{Comparación: Antes vs Ahora}
+\textbf{Antes (Sistema Separado):}
+\begin{itemize}
+    \item 2 terminales, 2 comandos, 2 puertos
+    \item Frontend: http://localhost:4200
+    \item Backend: http://localhost:8080
+    \item Dependencias: Java + Node.js + npm + Maven
+\end{itemize}
+
+\textbf{Ahora (Sistema Unificado):}
+\begin{itemize}
+    \item 1 terminal, 1 comando, 1 puerto
+    \item Todo: http://localhost:8080
+    \item Dependencias: Solo Java + MySQL
+\end{itemize}
 \end{infobox}
 
 \section{Información del Sistema}
@@ -329,19 +331,21 @@ curl http://localhost:8080/api/projects
 \hline
 \textbf{Componente} & \textbf{Versión/Tecnología} \\
 \hline
-Frontend & Angular 21.0.2 \\
+\textbf{Sistema} & \textbf{Unificado JAR Ejecutable} \\
+\hline
+Frontend & Angular 21.0.2 (integrado) \\
 \hline
 Backend & Spring Boot 3.2.0 \\
 \hline
 Base de Datos & MySQL 8.0 \\
 \hline
-Java & OpenJDK 17 \\
-\hline
-Node.js & 18+ \\
+Java & OpenJDK 17+ \\
 \hline
 UI Framework & Angular Material \\
 \hline
 Documentación API & Swagger/OpenAPI 3.0 \\
+\hline
+Despliegue & Un solo archivo JAR \\
 \hline
 \end{tabular}
 \end{center}
@@ -350,8 +354,11 @@ Documentación API & Swagger/OpenAPI 3.0 \\
 
 \begin{center}
 \rule{\linewidth}{0.5mm}\\
-\textit{Sistema listo para demostración y evaluación}\\
-\textbf{¡Éxito garantizado!}
+\textbf{SISTEMA COMPLETAMENTE UNIFICADO}\\
+\textit{Un comando, una aplicación, máxima simplicidad}\\[0.3cm]
+\textbf{Listo para demostración profesional}\\[0.2cm]
+{\large \texttt{java -jar target/gestion-tareas-1.0.0.jar}}\\
+{\normalsize \textit{http://localhost:8080}}
 \end{center}
 
 \end{document}

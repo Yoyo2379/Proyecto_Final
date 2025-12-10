@@ -4,14 +4,14 @@ API REST desarrollada con Spring Boot para gestionar proyectos y tareas con func
 
 ## Características
 
-- ✅ CRUD completo de Proyectos
-- ✅ CRUD completo de Tareas
-- ✅ Asignación de tareas a usuarios
-- ✅ Filtros por estado, prioridad y proyecto
-- ✅ Dashboard con estadísticas
-- ✅ Documentación Swagger/OpenAPI
-- ✅ Validación de datos
-- ✅ Manejo global de excepciones
+- CRUD completo de Proyectos
+- CRUD completo de Tareas
+- Asignación de tareas a usuarios
+- Filtros por estado, prioridad y proyecto
+- Dashboard con estadísticas
+- Documentación Swagger/OpenAPI
+- Validación de datos
+- Manejo global de excepciones
 
 ## Tecnologías
 
